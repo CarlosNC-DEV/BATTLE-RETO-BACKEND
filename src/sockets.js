@@ -11,6 +11,14 @@ export default (io) => {
       socket.emit("juego-creado", codigo);
     });
 
+    socket.on('iniciar-partida', () => {
+      const codigo = socket.codigoJuego;
+      if (codigo && juegos[codigo] && juegos[codigo].length >= 2) {
+        io.to(codigo).emit('partida-iniciada');
+        // Aquí podrías agregar lógica adicional para manejar la partida en sí
+      }
+    });
+
     socket.on("unirse-a-juego", (codigo) => {
       if (juegos[codigo] && juegos[codigo].length < 7) {
         juegos[codigo].push(socket.id);
@@ -25,13 +33,11 @@ export default (io) => {
       } else {
         socket.emit("codigo-invalido");
       }
-    });
+    });   
 
-    // Manejar el evento de repartir cartas
     // Manejar el evento de repartir cartas
     socket.on("repartir-cartas", (jugadoresConCartas) => {
       const imagenCarta1Jugador1 = jugadoresConCartas[0].jugador1[1];
-      console.log(imagenCarta1Jugador1)
     });
 
     socket.on("disconnect", () => {
