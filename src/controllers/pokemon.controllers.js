@@ -47,16 +47,20 @@ export const verPokemon = async (req, res) => {
       "4G",
       "4H",
     ];
-
+  
     const pokemon = await Pokemon.find().lean();
-
-    const pokemonWithIds = pokemon.map((card) => {
-      const randomIndex = Math.floor(Math.random() * idGame.length);
-      const randomId = idGame[randomIndex];
-      idGame.splice(randomIndex, 1);
+  
+    const idGameStandard = [...idGame];
+  
+    const shuffledPokemon = pokemon.sort(() => Math.random() - 0.5);
+  
+    const pokemonWithIds = shuffledPokemon.map((card, index) => {
+      const randomIndex = Math.floor(Math.random() * idGameStandard.length);
+      const randomId = idGameStandard[randomIndex];
+      idGameStandard.splice(randomIndex, 1);
       return { ...card, idGame: randomId };
     });
-
+  
     res.status(200).json(pokemonWithIds);
   } catch (error) {
     console.log(error);

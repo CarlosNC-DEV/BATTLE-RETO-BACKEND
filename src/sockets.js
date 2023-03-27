@@ -37,8 +37,7 @@ export default (io) => {
 
     // Manejar el evento de repartir cartas
     socket.on("repartir-cartas", (jugadoresConCartas) => {
-      const imagenCarta1Jugador1 = jugadoresConCartas[0].jugador1[1];
-      console.log(imagenCarta1Jugador1);
+      io.emit("recibir-cartas", jugadoresConCartas);
     });
 
     socket.on("disconnect", () => {
