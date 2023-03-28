@@ -1,5 +1,5 @@
 let juegos = {};
-let jugadoresCartas = {};
+const cartasEnJuego = [];
 
 export default (io) => {
   io.on("connection", (socket) => {
@@ -11,10 +11,10 @@ export default (io) => {
       socket.emit("juego-creado", codigo);
     });
 
-    socket.on('iniciar-partida', () => {
+    socket.on("iniciar-partida", () => {
       const codigo = socket.codigoJuego;
       if (codigo && juegos[codigo] && juegos[codigo].length >= 2) {
-        io.to(codigo).emit('partida-iniciada');
+        io.to(codigo).emit("partida-iniciada");
         // Aquí podrías agregar lógica adicional para manejar la partida en sí
       }
     });
@@ -33,11 +33,19 @@ export default (io) => {
       } else {
         socket.emit("codigo-invalido");
       }
-    });   
+    });
 
     // Manejar el evento de repartir cartas
     socket.on("repartir-cartas", (jugadoresConCartas) => {
+      console.log(jugadoresConCartas);
       io.emit("recibir-cartas", jugadoresConCartas);
+    });
+
+    socket.on("carta-en-juego", (jugada) => {
+      const { jugador, cartaEnJuego } = jugada;
+      cartasEnJuego.push(jugador);
+      console.log(cartasEnJuego);
+
     });
 
     socket.on("disconnect", () => {
