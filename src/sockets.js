@@ -45,9 +45,13 @@ export default (io) => {
     socket.on("cartas-en-juego", ({cartaEnJuego, jugador}) => {
       cartasEnJuego.push(cartaEnJuego)
       jugadoresEnJuego.push(jugador);
-
       io.emit("cartas-en-mesa", {cartasEnJuego, jugadoresEnJuego})
     });
+
+    socket.on("habilitar-resto", ({data})=>{
+      console.log(data);
+      io.emit("habilitados-resto", data);
+    })
 
     socket.on("disconnect", () => {
       console.log("a player disconnected");
