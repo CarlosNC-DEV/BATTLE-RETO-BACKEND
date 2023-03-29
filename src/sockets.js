@@ -59,6 +59,12 @@ export default (io) => {
       io.emit("ganador-ronda-carta", {ganador: ganador, cartaGanadora:cartaGanadora});
     })
 
+    socket.on("poder-jugar", (poder)=>{
+      console.log(poder);
+      io.emit("poder-carta", poder);
+
+    })
+
     socket.on("disconnect", () => {
       console.log("a player disconnected");
       cartasEnJuego=[];
