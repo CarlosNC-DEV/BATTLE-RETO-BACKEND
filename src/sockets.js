@@ -1,5 +1,6 @@
 let juegos = {};
-const cartasEnJuego = [];
+var cartasEnJuego = [];
+var jugadoresEnJuego = [];
 
 export default (io) => {
   io.on("connection", (socket) => {
@@ -41,15 +42,17 @@ export default (io) => {
       io.emit("recibir-cartas", jugadoresConCartas);
     });
 
-    socket.on("carta-en-juego", (jugada) => {
-      const { jugador, cartaEnJuego } = jugada;
-      cartasEnJuego.push(jugador);
-      console.log(cartasEnJuego);
+    socket.on("cartas-en-juego", ({cartaEnJuego, jugador}) => {
+      cartasEnJuego.push(cartaEnJuego)
+      jugadoresEnJuego.push(jugador);
 
+      io.emit("cartas-en-mesa", {cartasEnJuego, jugadoresEnJuego})
     });
 
     socket.on("disconnect", () => {
       console.log("a player disconnected");
+      cartasEnJuego=[];
+      jugadoresEnJuego=[];
       const codigo = socket.codigoJuego;
       if (codigo && juegos[codigo]) {
         juegos[codigo] = juegos[codigo].filter((id) => id !== socket.id);
