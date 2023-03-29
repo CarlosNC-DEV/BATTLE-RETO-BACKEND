@@ -53,6 +53,12 @@ export default (io) => {
       io.emit("habilitados-resto", data);
     })
 
+    socket.on("ganador-ronda", ({ganador, cartaGanadora})=>{
+      console.log(ganador);
+      console.log(cartaGanadora);
+      io.emit("ganador-ronda-carta", {ganador: ganador, cartaGanadora:cartaGanadora});
+    })
+
     socket.on("disconnect", () => {
       console.log("a player disconnected");
       cartasEnJuego=[];
